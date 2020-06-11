@@ -153,6 +153,7 @@ class GeofencingPlugin(context: Context, activity: Activity?) : MethodCallHandle
               .edit()
               .putLong(CALLBACK_DISPATCHER_HANDLE_KEY, callbackHandle)
               .apply()
+      context.startForegroundService(Intent(context, IsolateHolderService::class.java))
     }
 
     @JvmStatic
