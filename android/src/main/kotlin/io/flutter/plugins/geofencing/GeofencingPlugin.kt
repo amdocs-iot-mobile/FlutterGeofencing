@@ -122,6 +122,9 @@ class GeofencingPlugin(context: Context, activity: Activity?) : MethodCallHandle
           result?.error(it.toString(), null, null)
         }
       }
+
+      // Start foreground service
+      context.startForegroundService(Intent(context, IsolateHolderService::class.java))
     }
 
     @JvmStatic
@@ -153,7 +156,6 @@ class GeofencingPlugin(context: Context, activity: Activity?) : MethodCallHandle
               .edit()
               .putLong(CALLBACK_DISPATCHER_HANDLE_KEY, callbackHandle)
               .apply()
-      context.startForegroundService(Intent(context, IsolateHolderService::class.java))
     }
 
     @JvmStatic
@@ -188,6 +190,11 @@ class GeofencingPlugin(context: Context, activity: Activity?) : MethodCallHandle
           result.error(it.toString(), null, null)
         }
       }
+
+      // Stop background service
+      val intent = Intent(context, IsolateHolderService::class.java)
+      intent.setAction(IsolateHolderService.ACTION_SHUTDOWN)
+      context.startForegroundService(intent)
     }
 
     @JvmStatic
