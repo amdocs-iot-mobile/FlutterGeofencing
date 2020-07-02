@@ -124,7 +124,28 @@ class GeofencingPlugin(context: Context, activity: Activity?) : MethodCallHandle
       }
 
       // Start foreground service
-      context.startForegroundService(Intent(context, IsolateHolderService::class.java))
+      startForegroundService(context)
+    }
+
+    @JvmStatic
+    private fun sendIntentToForegroundService(context: Context, intent: Intent) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        context.startForegroundService(intent)
+      } else {
+        context.startService(intent)
+      }
+    }
+
+    @JvmStatic
+    private fun startForegroundService(context: Context) {
+      sendIntentToForegroundService(context, Intent(context, IsolateHolderService::class.java))
+    }
+
+    @JvmStatic
+    private fun stopForegroundService(context: Context) {
+      val intent = Intent(context, IsolateHolderService::class.java)
+      intent.setAction(IsolateHolderService.ACTION_SHUTDOWN)
+      sendIntentToForegroundService(context, intent)
     }
 
     @JvmStatic
@@ -191,10 +212,8 @@ class GeofencingPlugin(context: Context, activity: Activity?) : MethodCallHandle
         }
       }
 
-      // Stop background service
-      val intent = Intent(context, IsolateHolderService::class.java)
-      intent.setAction(IsolateHolderService.ACTION_SHUTDOWN)
-      context.startForegroundService(intent)
+      // Stop foreground service
+      stopForegroundService(context)
     }
 
     @JvmStatic

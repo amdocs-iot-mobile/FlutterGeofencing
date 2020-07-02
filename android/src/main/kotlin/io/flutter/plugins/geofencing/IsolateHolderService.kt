@@ -9,6 +9,7 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
@@ -37,13 +38,15 @@ class IsolateHolderService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        val CHANNEL_ID = "geofencing_plugin_channel"
-        val channel = NotificationChannel(CHANNEL_ID,
-                "Flutter Geofencing Plugin",
-                NotificationManager.IMPORTANCE_LOW)
         val imageId = getResources().getIdentifier("ic_launcher", "mipmap", getPackageName())
+        val CHANNEL_ID = "geofencing_plugin_channel"
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(CHANNEL_ID,
+                    "Flutter Geofencing Plugin",
+                    NotificationManager.IMPORTANCE_LOW)
+            (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel)
+        }
 
-        (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel)
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Monitoring position")
                 .setContentText("doxi is monitoring your position to record when you enter/leave home")
