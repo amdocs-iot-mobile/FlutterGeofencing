@@ -49,9 +49,10 @@ class IsolateHolderService : Service() {
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Monitoring position")
-                .setContentText("doxi is monitoring your position to record when you enter/leave home")
                 .setSmallIcon(imageId)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setStyle(NotificationCompat.BigTextStyle()
+                        .bigText("doxi is monitoring your position to record when you enter/leave home"))
                 .build()
 
         (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
