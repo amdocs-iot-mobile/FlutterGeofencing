@@ -38,7 +38,7 @@ class IsolateHolderService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        val imageId = getResources().getIdentifier("ic_launcher", "mipmap", getPackageName())
+        val imageId = getResources().getIdentifier("ic_local_notification", "drawable", getPackageName())
         val CHANNEL_ID = "geofencing_plugin_channel"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(CHANNEL_ID,
